@@ -9,7 +9,8 @@ library(tidyverse)
 In the package `dplyr` there is a dataset called `starwars`. 
 
 ```{r}
-starwars
+# starwars <- dplyr::starwars
+glimpse(starwars)
 ```
 
 
@@ -74,6 +75,7 @@ Okay, so we have missing data here. Try summarising with `na.omit(height)` inste
 
 ```{r}
 
+starwars %>% filter(eye_color == "brown") %>% summarize(mean(na.omit(height)))
 
 ```
 
@@ -81,7 +83,21 @@ So, who is the tallest male? How many blue eyed women are there? How many gender
 
 
 ```{r}
+#who is the tallest male
 
+
+malemaxheight<- starwars %>% filter(gender == "masculine") %>% summarize(max(na.omit(height)))
+
+filter(starwars, gender == "masculine", height == malemaxheight$`max(na.omit(height))`)
+
+```
+```{r}
+#How many blue eyed women are there
+starwars %>% filter(eye_color == "blue", gender == "feminine")%>% summarize(n_count = n())
+```
+```{r}
+#How many genders are there
+starwars %>% group_by(gender)%>% summarize(n_count = n())
 ```
 
 
