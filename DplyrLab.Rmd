@@ -9,7 +9,7 @@ library(tidyverse)
 In the package `dplyr` there is a dataset called `starwars`. 
 
 ```{r}
-glimpse(starwars)
+starwars
 ```
 
 
@@ -28,6 +28,11 @@ starwars %>% filter(species == "Human") %>% plot(mass ~ height, data = .)
 Now, change this to see the same plot for the Droids. 
 
 ```{r}
+droids <- starwars %>% filter(species == "Droid")
+plot(droids$height, droids$mass)
+
+starwars %>% filter(species == "Droid") %>% plot(mass ~ height, data = .)
+
 
 
 ```
@@ -36,7 +41,7 @@ Now, change this to see the same plot for the Droids.
 How many characters are from each planet?
 
 ```{r}
-
+starwars %>% group_by(homeworld) %>% summarize(n_count = n())
 
 
 ```
@@ -44,13 +49,16 @@ How many characters are from each planet?
 If you wanted to arrange this in descending order, what would you add to the pipe? 
 
 ```{r}
-
+starwars <- na.omit(starwars)
+starwars %>% group_by(homeworld) %>% summarize(n_count = n()) %>% arrange(desc(n_count))
 ```
 
 Find the average height for each eye color.
 
 ```{r}
+starwars <- na.omit(starwars)
 
+starwars %>% group_by(eye_color) %>% summarize(mean(height))
 
 ```
 
@@ -58,6 +66,7 @@ What's with the NAs? Filter down to just brown eyes find out.
 
 
 ```{r}
+starwars %>% filter(eye_color == "brown") %>% summarize(mean(height))
 ```
 
 Okay, so we have missing data here. Try summarising with `na.omit(height)` instead of just `height` or adding `na.rm = T` to the mean function inside summarize. 
